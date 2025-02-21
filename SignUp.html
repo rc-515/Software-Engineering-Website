@@ -15,9 +15,9 @@
             <input type="text" id="name" placeholder="Enter your name">
             <input type="email" id="email" placeholder="Enter your email">
             <input type="password" id="password" placeholder="Enter your password">
-            <input type="number" id="weight" placeholder="Your weight (lbs)">
-            <input type="number" id="height" placeholder="Your height (inches)">
-            <input type="number" id="bench" placeholder="Your max bench press (lbs)">
+            <input type="number" id="weight" placeholder="Your weight (lbs)" min="0">
+            <input type="number" id="height" placeholder="Your height (inches)" min="0">
+            <input type="number" id="bench" placeholder="Your max bench press (lbs)" min="0">
             <select id="experience">
                 <option>Beginner</option>
                 <option>Intermediate</option>
@@ -26,7 +26,7 @@
             <div class="terms">
                 <input type="checkbox" id="termsCheckbox">
                 <label for="termsCheckbox">
-                    I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a>
+                    I agree to the <a href="terms.html" target="_blank" color="red">Terms and Conditions</a>
                 </label>
             </div>
             <button type="submit">Sign Up & Fight</button>

@@ -11,6 +11,12 @@ body {
 
 .container {
     text-align: center;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    height: 100vh; /* Full height of viewport */
+    width: 100%;
 }
 
 form {
@@ -20,7 +26,11 @@ form {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
+    display: flex;
+    flex-direction: column; /* Ensure all form elements are stacked */
+    align-items: center; /* Center elements inside */
 }
+
 
 input, select, button {
     width: 100%;
@@ -52,6 +62,7 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 400px;
+    align-items: center;
 }
 
 ol {
@@ -65,4 +76,16 @@ ol {
 
 .back-link:hover {
     text-decoration: underline;
+}
+
+a:link {
+  color: red;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: red;
+  background-color: transparent;
+  text-decoration: none;
 }
