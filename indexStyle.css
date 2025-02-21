@@ -1,0 +1,99 @@
+/* Navigation Bar */
+.navbar {
+    background-color: #2d3748;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.navbar ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Content Sections */
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.intro, .features, .gallery, .cta {
+    background-color: #2d3748;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px;
+    width: 45%;
+}
+
+/* Images Section */
+.images-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.images-section img {
+    width: 200px;
+    height: auto;
+    margin: 10px;
+    border-radius: 8px;
+}
+
+/* Iframe Embed */
+.signup-frame {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Flexbox Layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content div {
+    flex: 1;
+    margin: 10px;
+}
+
+/* ID and Class Selectors */
+#main-title {
+    color: #e53e3e;
+    font-size: 32px;
+}
+
+.box {
+    background-color: #4a5568;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
