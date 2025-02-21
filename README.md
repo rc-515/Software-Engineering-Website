@@ -8,5 +8,5 @@ How to run: Simply go to http://rc-515.github.io/Software-Engineering-Website/
 We consulted ChatGPT for help with understanding HTML and CSS, as well as direction for approriately using GitHub
 
 Rowan/Alex
-55/45 (Rowan came up with the idea)
+53/47 (Rowan came up with the idea but work distribution was very similar)
 
