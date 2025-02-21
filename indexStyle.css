@@ -1,3 +1,10 @@
+
+body {
+    background-color: #121212; 
+    color: #ffffff; 
+    font-family: Arial, sans-serif;
+}
+
 /* Navigation Bar */
 .navbar {
     background-color: #2d3748;
@@ -62,6 +69,21 @@
     justify-content: center;
     margin-top: 20px;
     text-align: center;
+}
+
+
+button {
+    background-color: #e53e3e; 
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #c53030; 
 }
 
 /* Flexbox Layout */
