@@ -67,3 +67,15 @@ ol {
 .back-link:hover {
     text-decoration: underline;
 }
+
+a:link {
+  color: red;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: red;
+  background-color: transparent;
+  text-decoration: none;
+}
