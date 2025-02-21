@@ -121,6 +121,38 @@ button:hover {
     margin: 10px;
 }
 
+/* Wikipedia Links Section */
+.wiki-links {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #2d3748;
+    border-radius: 8px;
+}
+
+.wiki-links h2 {
+    color: #e53e3e;
+}
+
+.wiki-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.wiki-links ul li {
+    margin: 10px 0;
+}
+
+.wiki-links ul li a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.wiki-links ul li a:hover {
+    text-decoration: underline;
+}
+
 /* Footer Section */
 footer {
     text-align: center;
