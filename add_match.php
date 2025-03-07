@@ -27,6 +27,7 @@ $fight_date = date('Y-m-d', strtotime("+$random_days days"));
 echo "<p><strong>DEBUG: Your Stats:</strong> Email: $user_email, Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
 
 // Find up to 5 potential matches based on stats and exact experience match, excluding already scheduled matches
+// Find up to 5 potential matches based on stats and exact experience match, excluding already scheduled matches
 $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press, experience 
                         FROM users 
                         WHERE id != ? 
@@ -36,7 +37,9 @@ $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press
                         AND ABS(bench_press - ?) <= 25 
                         AND id NOT IN (SELECT opponent_id FROM matches WHERE id = ? UNION SELECT id FROM matches WHERE opponent_id = ?) 
                         LIMIT 5");
-$stmt->bind_param("isiiii", $user_id, $user_experience, $user_weight, $user_height, $user_bench, $user_id, $user_id);
+
+// Fixing the number of placeholders in bind_param
+$stmt->bind_param("isiiiii", $user_id, $user_experience, $user_weight, $user_height, $user_bench, $user_id, $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
