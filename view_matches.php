@@ -1,27 +1,13 @@
 <?php
-include 'db_connect.php';
+include 'db_implement.php';
 session_start();
 
-if (!isset($_SESSION["username"])) {
-    header("Location: login.php"); // Redirect to login page
-    exit();
-}
-
-$sql = "SELECT * FROM matches WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $_SESSION["username"]);
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT matches.id, users.full_name, matches.opponent, matches.fight_date FROM matches JOIN users ON matches.user_id = users.id";
+$result = $conn->query($sql);
 
 echo "<h2>Scheduled Fights</h2>";
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "Match ID: " . $row["id"] . " - User: " . $row["username"] . " vs " . $row["opponent"] . " on " . $row["fight_date"] . "<br>";
-    }
-} else {
-    echo "No matches found.";
+while ($row = $result->fetch_assoc()) {
+    echo "Match ID: " . $row["id"] . " - " . $row["full_name"] . " vs " . $row["opponent"] . " on " . $row["fight_date"] . "<br>";
 }
-
-$stmt->close();
 $conn->close();
 ?>
