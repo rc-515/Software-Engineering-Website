@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'db_implement.php';
 session_start();
 
@@ -6,21 +9,33 @@ if (!isset($_SESSION["user_id"])) {
     die("Access denied.");
 }
 
-if (isset($_GET["id"])) {
-    $match_id = intval($_GET["id"]);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["match_id"])) {
+    $match_id = intval($_POST["match_id"]);
 
-    $stmt = $conn->prepare("DELETE FROM matches WHERE id = ?");
+    // Verify user is part of the match
+    $stmt = $conn->prepare("SELECT challenger_name, opponent_name FROM matches WHERE match_id = ?");
     $stmt->bind_param("i", $match_id);
-
-    if ($stmt->execute()) {
-        echo "Match deleted successfully!";
-    } else {
-        echo "Error deleting match: " . $stmt->error;
-    }
-
+    $stmt->execute();
+    $stmt->bind_result($challenger_name, $opponent_name);
+    $stmt->fetch();
     $stmt->close();
-    $conn->close();
-} else {
-    echo "Invalid request.";
+
+    if ($challenger_name == $_SESSION["full_name"] || $opponent_name == $_SESSION["full_name"]) {
+        // Delete the match
+        $stmt = $conn->prepare("DELETE FROM matches WHERE match_id = ?");
+        $stmt->bind_param("i", $match_id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Match deleted successfully!'); window.location.href = 'view_matches.php';</script>";
+        } else {
+            echo "<script>alert('Error deleting match.'); window.location.href = 'view_matches.php';</script>";
+        }
+
+        $stmt->close();
+    } else {
+        echo "<script>alert('You are not authorized to delete this match.'); window.location.href = 'view_matches.php';</script>";
+    }
 }
+
+$conn->close();
 ?>
