@@ -1,3 +1,22 @@
+<?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    die("Access denied.");
+}
+
+include 'db_implement.php';
+
+// Fetch user details
+$user_id = $_SESSION["user_id"];
+$stmt = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($full_name, $email);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,6 +71,9 @@
 </head>
 <body>
     <div class="container">
+        <p><strong>Logged in as:</strong> <?php echo $full_name . " (" . $email . ")"; ?></p>
+        <hr>
+
         <h2>Your Scheduled Fights</h2>
         <div id="scheduledMatches"></div>
 
