@@ -1,65 +1,57 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'db_implement.php';
-session_start();
-
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_email"])) {
     die("Access denied.");
 }
 
-$user_id = $_SESSION["user_id"];
+include 'db_implement.php';
 
-// Get the logged-in user's name
-$stmt = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$stmt->bind_result($user_name, $user_email);
-$stmt->fetch();
-$stmt->close();
+$user_email = $_SESSION["user_email"];
 
-// Store full name in session for later checks
-$_SESSION["full_name"] = $user_name;
-
-// Retrieve all matches
-$stmt = $conn->prepare("SELECT match_id, challenger_name, opponent_name, fight_date FROM matches");
+// Retrieve all matches and get challenger & opponent details from the `users` table
+$stmt = $conn->prepare("
+    SELECT m.match_id, m.challenger_name, m.opponent_name, m.fight_date, 
+           u1.full_name AS challenger_full_name, u1.weight AS challenger_weight, u1.height AS challenger_height, 
+           u1.bench_press AS challenger_bench, u1.experience AS challenger_experience,
+           u2.full_name AS opponent_full_name, u2.weight AS opponent_weight, u2.height AS opponent_height, 
+           u2.bench_press AS opponent_bench, u2.experience AS opponent_experience
+    FROM matches m
+    JOIN users u1 ON m.challenger_name = u1.email
+    JOIN users u2 ON m.opponent_name = u2.email
+");
 $stmt->execute();
 $result = $stmt->get_result();
 
 echo "<h3>All Scheduled Matches</h3>";
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $challenger_name = $row["challenger_name"];
-        $opponent_name = $row["opponent_name"];
-        $fight_date = $row["fight_date"];
         $match_id = $row["match_id"];
+        $challenger_name = $row["challenger_full_name"];
+        $challenger_weight = $row["challenger_weight"];
+        $challenger_height = $row["challenger_height"];
+        $challenger_bench = $row["challenger_bench"];
+        $challenger_experience = $row["challenger_experience"];
 
-        // Fetch challenger stats
-        $stmt2 = $conn->prepare("SELECT weight, height, bench_press, experience FROM users WHERE full_name = ?");
-        $stmt2->bind_param("s", $challenger_name);
-        $stmt2->execute();
-        $stmt2->bind_result($challenger_weight, $challenger_height, $challenger_bench, $challenger_experience);
-        $stmt2->fetch();
-        $stmt2->close();
+        $opponent_name = $row["opponent_full_name"];
+        $opponent_weight = $row["opponent_weight"];
+        $opponent_height = $row["opponent_height"];
+        $opponent_bench = $row["opponent_bench"];
+        $opponent_experience = $row["opponent_experience"];
 
-        // Fetch opponent stats
-        $stmt3 = $conn->prepare("SELECT weight, height, bench_press, experience FROM users WHERE full_name = ?");
-        $stmt3->bind_param("s", $opponent_name);
-        $stmt3->execute();
-        $stmt3->bind_result($opponent_weight, $opponent_height, $opponent_bench, $opponent_experience);
-        $stmt3->fetch();
-        $stmt3->close();
+        $fight_date = $row["fight_date"];
 
         echo "<p><strong>Match ID:</strong> $match_id<br>";
         echo "<strong>Challenger:</strong> $challenger_name<br>";
-        echo "<strong>Weight:</strong> $challenger_weight lbs | <strong>Height:</strong> $challenger_height inches | <strong>Bench Press:</strong> $challenger_bench lbs | <strong>Experience:</strong> $challenger_experience<br>";
+        echo "Weight: $challenger_weight lbs | Height: $challenger_height inches | Bench Press: $challenger_bench lbs | Experience: $challenger_experience <br>";
         echo "<strong>Opponent:</strong> $opponent_name<br>";
-        echo "<strong>Weight:</strong> $opponent_weight lbs | <strong>Height:</strong> $opponent_height inches | <strong>Bench Press:</strong> $opponent_bench lbs | <strong>Experience:</strong> $opponent_experience<br>";
-        echo "<strong>Fight Date:</strong> $fight_date<br>";
+        echo "Weight: $opponent_weight lbs | Height: $opponent_height inches | Bench Press: $opponent_bench lbs | Experience: $opponent_experience <br>";
+        echo "<strong>Fight Date:</strong> $fight_date</p>";
 
-        // Allow the user to edit or delete if they are part of the match
-        if ($challenger_name == $user_name || $opponent_name == $user_name) {
+        // Check if the logged-in user's email matches either the challenger or the opponent
+        if ($user_email == $row["challenger_name"] || $user_email == $row["opponent_name"]) {
             echo "<form method='POST' action='edit_match.php' style='display:inline;'>
                     <input type='hidden' name='match_id' value='$match_id'>
                     <label for='new_date'>New Date:</label>
@@ -71,9 +63,11 @@ if ($result->num_rows > 0) {
                     <input type='hidden' name='match_id' value='$match_id'>
                     <button type='submit' name='delete_match'>Delete</button>
                 </form>";
+        } else {
+            echo "<p><em>You cannot edit or delete this match.</em></p>";
         }
 
-        echo "</p><hr>";
+        echo "<hr>";
     }
 } else {
     echo "<p>No scheduled matches.</p>";
