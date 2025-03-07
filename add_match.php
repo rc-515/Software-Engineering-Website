@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["schedule_match"])) {
             die("<p>ERROR: Execution failed - " . $stmt->error . "</p>");
         }
         
-        echo "<script>alert('Match scheduled successfully!'); window.location.href = 'add_match.php';</script>";
+        echo "<script>alert('Match scheduled successfully!'); window.location.href = 'dashboard.html';</script>";
     }
 }
 
