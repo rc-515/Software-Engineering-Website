@@ -27,14 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["match_id"]) && isset($
         $stmt->bind_param("si", $new_date, $match_id);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Match date updated successfully!'); window.location.href = 'dashboard.html';</script>";
+            echo "<script>alert('Match date updated successfully!'); window.location.href = 'dashboard.php';</script>";
         } else {
-            echo "<script>alert('Error updating match date.'); window.location.href = 'dashboard.html';</script>";
+            echo "<script>alert('Error updating match date.'); window.location.href = 'dashboard.php';</script>";
         }
 
         $stmt->close();
     } else {
-        echo "<script>alert('You are not authorized to edit this match.'); window.location.href = 'dashboard.html';</script>";
+        echo "<script>alert('You are not authorized to edit this match.'); window.location.href = 'dashboard.php';</script>";
     }
 }
 
