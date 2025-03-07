@@ -34,7 +34,7 @@ $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press
                         AND ABS(weight - ?) <= 15 
                         AND ABS(height - ?) <= 4 
                         AND ABS(bench_press - ?) <= 25 
-                        AND id NOT IN (SELECT opponent_id FROM matches WHERE id = ? OR opponent_id = ?) 
+                        AND id NOT IN (SELECT opponent_id FROM matches WHERE id = ? UNION SELECT id FROM matches WHERE opponent_id = ?) 
                         LIMIT 5");
 $stmt->bind_param("isiiii", $user_id, $user_experience, $user_weight, $user_height, $user_bench, $user_id, $user_id);
 $stmt->execute();
