@@ -13,16 +13,16 @@
         <p>Sign up and challenge fighters based on weight, height, strength, and more.</p>
         
         <form id="signupForm" method="POST" action="register.php">
-            <input type="text" id="full_name" placeholder="Enter your name">
-            <input type="email" id="email" placeholder="Enter your email">
-            <input type="password" id="password" placeholder="Enter your password">
-            <input type="number" id="weight" placeholder="Your weight (lbs)" min="0">
-            <input type="number" id="height" placeholder="Your height (inches)" min="0">
-            <input type="number" id="bench_press" placeholder="Your max bench press (lbs)" min="0">
-            <select id="experience">
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
+            <input type="text" id="full_name" name="full_name" placeholder="Enter your name" required>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <input type="number" id="weight" name="weight" placeholder="Your weight (lbs)" min="0" required>
+            <input type="number" id="height" name="height" placeholder="Your height (inches)" min="0" required>
+            <input type="number" id="bench_press" name="bench_press" placeholder="Your max bench press (lbs)" min="0" required>
+            <select id="experience" name="experience" required>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
             </select>
             <div class="terms">
                 <input type="checkbox" id="termsCheckbox">
