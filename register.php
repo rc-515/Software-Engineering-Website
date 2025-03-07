@@ -36,6 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmt->close();
 
+    //check password length
+    if (strlen($password) < 10) {
+        die("Error: Password must be at least 10 characters long.");
+    }
+
     // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
