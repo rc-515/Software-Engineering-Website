@@ -48,7 +48,6 @@ if ($result->num_rows > 0) {
                 <input type='hidden' name='opponent_id' value='" . $row["id"] . "'>
                 <input type='hidden' name='fight_date' value='" . $fight_date . "'>
                 <button type='submit' name='schedule_match' onclick="alert('Schedule button clicked');">Schedule</button>
-
               </form><br><br>";
     }
 } else {
