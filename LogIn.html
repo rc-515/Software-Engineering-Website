@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="SignUpStyle.css">
+    <script>
+        function loginUser(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let formData = new FormData(document.getElementById("loginForm"));
+
+            fetch("login.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("loginMessage").innerHTML = data;
+                if (data.includes("Login successful!")) {
+                    window.location.href = "dashboard.html"; // Redirect to dashboard after successful login
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -12,8 +32,8 @@
         <p>Log in to continue your journey and find your next match.</p>
 
         <!-- Login Form -->
-        <form action="login_process.php" method="POST">
-            <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+        <form action="login.php" method="POST">
+            <input type="text" id="email" name="email" placeholder="Enter your email" required>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
             <button type="submit">Log In</button>
         </form>
