@@ -4,20 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+        /* Style for the username display */
+        #usernameDisplay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
     <script>
-        function fetchMatches() {
-            fetch("view_matches.php")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("matchesList").innerHTML = data;
-            })
-            .catch(error => console.error("Error:", error));
+        // Function to fetch and display the username
+        function fetchUsername() {
+            fetch("get_username.php") // Replace with your server-side script to get the username
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("usernameDisplay").innerText = "Welcome, " + data;
+                })
+                .catch(error => console.error("Error fetching username:", error));
         }
 
-        window.onload = fetchMatches; // Fetch matches when the page loads
+        // Function to fetch and display matches
+        function fetchMatches() {
+            fetch("view_matches.php")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("matchesList").innerHTML = data;
+                })
+                .catch(error => console.error("Error fetching matches:", error));
+        }
+
+        // Fetch username and matches when the page loads
+        window.onload = function () {
+            fetchUsername();
+            fetchMatches();
+        };
     </script>
 </head>
 <body>
+    <!-- Username display -->
+    <div id="usernameDisplay"></div>
+
     <h2>Your Scheduled Fights</h2>
     <div id="matchesList"></div>
     <a href="logout.php">Logout</a>
