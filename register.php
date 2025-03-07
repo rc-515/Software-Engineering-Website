@@ -15,12 +15,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bench_press = intval($_POST["bench_press"]);
     $experience = $_POST["experience"];
 
+    // Set username to be the same as email
+    $username = $email;
+
     // Check if fields are empty
     if (empty($full_name) || empty($email) || empty($password) || empty($weight) || empty($height) || empty($bench_press) || empty($experience)) {
         die("Error: All fields must be filled out.");
     }
 
-    // Validate email
+    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         die("Error: Invalid email format.");
     }
@@ -30,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-    
+
     if ($stmt->num_rows > 0) {
         die("Error: Email already exists.");
     }
     $stmt->close();
 
-    //check password length
+    // Check password length
     if (strlen($password) < 10) {
         die("Error: Password must be at least 10 characters long.");
     }
@@ -45,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert user into database
-    $stmt = $conn->prepare("INSERT INTO users (full_name, email, password_hash, weight, height, bench_press, experience) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssiiis", $full_name, $email, $hashed_password, $weight, $height, $bench_press, $experience);
+    $stmt = $conn->prepare("INSERT INTO users (username, full_name, email, password_hash, weight, height, bench_press, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssiiis", $username, $full_name, $email, $hashed_password, $weight, $height, $bench_press, $experience);
 
     if ($stmt->execute()) {
         echo "Registration successful!";
