@@ -1,5 +1,5 @@
 <?php
-$servername = "	sql206.infinityfree.com";
+$servername = "sql206.infinityfree.com";
 $username = "if0_38463553"; 
 $password = "GlotzerCahill"; 
 $database = "if0_38463553_appdb"; 
