@@ -5,23 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fight Signup</title>
     <link rel="stylesheet" href="SignUpStyle.css">
-    <script>
-        function submitForm(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            let formData = new FormData(document.getElementById("signupForm"));
-
-            fetch("register.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("signupMessage").innerHTML = data;
-            })
-            .catch(error => console.error("Error:", error));
-        }
-    </script>
+    
 </head>
 <body>
     <div class="container">
@@ -51,4 +35,22 @@
         <p class="login-prompt">Already have an account? <a href="LogIn.html">Log in</a>.</p>
     </div>
 </body>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let formData = new FormData(document.getElementById("signupForm"));
+
+            fetch("register.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("signupMessage").innerHTML = data;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
 </html>
