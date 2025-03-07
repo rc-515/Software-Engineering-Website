@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script>
+        function fetchMatches() {
+            fetch("view_matches.php")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("matchesList").innerHTML = data;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        window.onload = fetchMatches; // Fetch matches when the page loads
+    </script>
+</head>
+<body>
+    <h2>Your Scheduled Fights</h2>
+    <div id="matchesList"></div>
+    <a href="logout.php">Logout</a>
+</body>
+</html>
