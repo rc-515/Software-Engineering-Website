@@ -12,7 +12,7 @@
         <h1>Find Your Match. Fight Your Rival.</h1>
         <p>Sign up and challenge fighters based on weight, height, strength, and more.</p>
         
-        <form>
+        <form id="signupForm">
             <input type="text" id="name" placeholder="Enter your name">
             <input type="email" id="email" placeholder="Enter your email">
             <input type="password" id="password" placeholder="Enter your password">
@@ -32,6 +32,7 @@
             </div>
             <button type="submit">Sign Up & Fight</button>
         </form>
+        <p id="signupMessage"></p>
         <p class="login-prompt">Already have an account? <a href="LogIn.html">Log in</a>.</p>
     </div>
 
@@ -41,7 +42,7 @@
 
             console.log("Submit button clicked!"); // Debugging message
 
-            let formData = new FormData(document.getElementById("form"));
+            let formData = new FormData(document.getElementById("signupForm"));
 
             fetch("register.php", {
                 method: "POST",
