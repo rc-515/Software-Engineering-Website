@@ -89,3 +89,18 @@ a:visited {
   background-color: transparent;
   text-decoration: none;
 }
+
+.login-prompt {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-prompt a {
+    color: red;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline; 
+}
