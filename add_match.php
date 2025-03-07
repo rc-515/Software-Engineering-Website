@@ -1,31 +1,17 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'db_implement.php';
 session_start();
+
 if (!isset($_SESSION["user_id"])) {
     die("Access denied.");
 }
 
 $user_id = $_SESSION["user_id"];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["opponent_id"]) && isset($_POST["fight_date"])) {
-    $opponent_id = intval($_POST["opponent_id"]);
-    $fight_date = $_POST["fight_date"];
-
-    $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
-    $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
-
-    if ($stmt->execute()) {
-        echo "Match scheduled successfully!";
-    } else {
-        echo "Error scheduling match: " . $stmt->error;
-    }
-
-    $stmt->close();
-    $conn->close();
-    exit();
-}
-
-// Get the current user's details
+// Get current user's attributes
 $stmt = $conn->prepare("SELECT weight, height, bench_press, experience FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -33,13 +19,17 @@ $stmt->bind_result($user_weight, $user_height, $user_bench, $user_experience);
 $stmt->fetch();
 $stmt->close();
 
-// Find up to 5 potential matches
+// Debugging - Print user's stats
+echo "<p><strong>Your Stats:</strong> Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
+
+// Find up to 5 potential matches based on stats and exact experience match
 $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press, experience 
                         FROM users 
-                        WHERE id != ? AND experience = ? 
-                        AND ABS(weight - ?) <= 10 
-                        AND ABS(height - ?) <= 3 
-                        AND ABS(bench_press - ?) <= 20 
+                        WHERE id != ? 
+                        AND experience = ? 
+                        AND ABS(weight - ?) <= 15 
+                        AND ABS(height - ?) <= 4 
+                        AND ABS(bench_press - ?) <= 25 
                         LIMIT 5");
 $stmt->bind_param("isiii", $user_id, $user_experience, $user_weight, $user_height, $user_bench);
 $stmt->execute();
@@ -53,7 +43,7 @@ if ($result->num_rows > 0) {
         echo "<button onclick='scheduleMatch(" . $row["id"] . ")'>Schedule</button><br><br>";
     }
 } else {
-    echo "<p>Sorry, no suitable matches were found at this time.</p>";
+    echo "<p>No suitable matches found.</p>";
 }
 
 $stmt->close();
