@@ -10,3 +10,4 @@ We consulted ChatGPT for help with understanding HTML and CSS, as well as direct
 Rowan/Alex
 53/47 (Rowan came up with the idea but work distribution was very similar)
 
+Alex XAMPP Screenshot: ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
