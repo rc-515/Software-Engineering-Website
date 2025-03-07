@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="SignUpStyle.css">
+    <script>
+        function loginUser(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let formData = new FormData(document.getElementById("loginForm"));
+
+            fetch("login.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("loginMessage").innerHTML = data;
+                if (data.includes("Login successful!")) {
+                    window.location.href = "dashboard.html"; // Redirect to dashboard after successful login
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
 </head>
 <body>
     <div class="container">
