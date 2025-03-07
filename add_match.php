@@ -77,6 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["opponent_id"])) {
     $stmt->close();
     $conn->close();
 
-    echo "<script>alert('Match scheduled successfully!'); window.location.href = 'dashboard.html';</script>";
+    echo "<script>alert('Match scheduled successfully!'); window.location.href = 'dashboard.php';</script>";
 }
 ?>
