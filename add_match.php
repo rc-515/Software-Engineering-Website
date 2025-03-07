@@ -12,10 +12,10 @@ if (!isset($_SESSION["user_id"])) {
 $user_id = $_SESSION["user_id"];
 
 // Get current user's attributes
-$stmt = $conn->prepare("SELECT weight, height, bench_press, experience FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT email, weight, height, bench_press, experience FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$stmt->bind_result($user_weight, $user_height, $user_bench, $user_experience);
+$stmt->bind_result($user_email, $user_weight, $user_height, $user_bench, $user_experience);
 $stmt->fetch();
 $stmt->close();
 
@@ -24,7 +24,7 @@ $random_days = rand(30, 90);
 $fight_date = date('Y-m-d', strtotime("+$random_days days"));
 
 // Debugging - Print user's stats
-echo "<p><strong>DEBUG: Your Stats:</strong> Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
+echo "<p><strong>DEBUG: Your Stats:</strong> Email: $user_email, Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
 
 // Find up to 5 potential matches based on stats and exact experience match
 $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press, experience 
@@ -66,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["schedule_match"])) {
         
         echo "<p>DEBUG: Attempting to insert match with Opponent ID = $opponent_id, Fight Date = $fight_date</p>";
 
-        $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO matches (id, opponent_id, fight_date, user_email) VALUES (?, ?, ?, ?)");
         if (!$stmt) {
             die("<p>ERROR: Prepare statement failed - " . $conn->error . "</p>");
         }
-        $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
+        $stmt->bind_param("iiss", $user_id, $opponent_id, $fight_date, $user_email);
         
         if (!$stmt->execute()) {
             die("<p>ERROR: Execution failed - " . $stmt->error . "</p>");
