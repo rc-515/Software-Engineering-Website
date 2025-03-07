@@ -44,10 +44,10 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<p>Opponent: " . $row["full_name"] . " (" . $row["email"] . ")<br>";
         echo "Weight: " . $row["weight"] . " lbs, Height: " . $row["height"] . " inches, Bench Press: " . $row["bench_press"] . " lbs, Experience: " . $row["experience"] . "</p>";
-        echo "<form method='POST' action=''>
+        echo "<form method='POST' action='add_match.php'>
                 <input type='hidden' name='opponent_id' value='" . $row["id"] . "'>
                 <input type='hidden' name='fight_date' value='" . $fight_date . "'>
-                <button type='submit' name='schedule_match' onclick="alert('Schedule button clicked');">Schedule</button>
+                <button type='submit' name='schedule_match' class='schedule-btn' data-opponent='" . $row["id"] . "'>Schedule</button>
               </form><br><br>";
     }
 } else {
@@ -64,21 +64,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["schedule_match"])) {
         $opponent_id = intval($_POST["opponent_id"]);
         $fight_date = $_POST["fight_date"];
         
-        echo "<p>DEBUG: Opponent ID = $opponent_id, Fight Date = $fight_date</p>";
+        echo "<p>DEBUG: Attempting to insert match with Opponent ID = $opponent_id, Fight Date = $fight_date</p>";
 
         $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
+        if (!$stmt) {
+            die("<p>ERROR: Prepare statement failed - " . $conn->error . "</p>");
+        }
         $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
         
-        if ($stmt->execute()) {
-            echo "<script>alert('Match scheduled successfully!'); window.location.href = window.location.href;</script>";
-        } else {
-            echo "<p>DEBUG: Error scheduling match: " . $stmt->error . "</p>";
+        if (!$stmt->execute()) {
+            die("<p>ERROR: Execution failed - " . $stmt->error . "</p>");
         }
         
-        $stmt->close();
+        echo "<script>alert('Match scheduled successfully!'); window.location.href = 'add_match.php';</script>";
     }
 }
 
 $stmt->close();
 $conn->close();
 ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".schedule-btn").forEach(button => {
+        button.addEventListener("click", function(event) {
+            alert("Schedule button clicked for Opponent ID: " + this.getAttribute("data-opponent"));
+        });
+    });
+});
+</script>
