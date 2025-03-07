@@ -37,21 +37,29 @@
 
     <script>
         function submitForm(event) {
-        event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); // Prevent default form submission
 
-        let formData = new FormData(document.getElementById("signupForm"));
+            console.log("Submit button clicked!"); // Debugging message
 
-        fetch("register.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Server response:", data); // Debugging
-            document.getElementById("signupMessage").innerHTML = data;
-        })
-        .catch(error => console.error("Error:", error));
-    }
+            let formData = new FormData(document.getElementById("signupForm"));
+
+            fetch("register.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server response:", data); // Show what PHP returns
+                document.getElementById("signupMessage").innerHTML = data;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Ensure the script runs after the DOM is loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("signupForm").addEventListener("submit", submitForm);
+            console.log("JavaScript is loaded!");
+        });
     </script>
 </body>
 
