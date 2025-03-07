@@ -20,7 +20,7 @@ $stmt->fetch();
 $stmt->close();
 
 // Fetch all users except the logged-in user
-$stmt = $conn->prepare("SELECT id, full_name FROM users WHERE id != ?");
+$stmt = $conn->prepare("SELECT id, full_name, weight, height, bench_press, experience FROM users WHERE id != ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -28,12 +28,15 @@ $result = $stmt->get_result();
 echo "<h3>Available Opponents</h3>";
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<p>Opponent: " . $row["full_name"] . " 
-            <form method='POST' action='add_match.php' style='display:inline;'>
+        echo "<p><strong>Opponent:</strong> " . $row["full_name"] . "<br>";
+        echo "<strong>Weight:</strong> " . $row["weight"] . " lbs<br>";
+        echo "<strong>Height:</strong> " . $row["height"] . " inches<br>";
+        echo "<strong>Bench Press:</strong> " . $row["bench_press"] . " lbs<br>";
+        echo "<strong>Experience:</strong> " . $row["experience"] . "<br>";
+        echo "<form method='POST' action='add_match.php' style='display:inline;'>
                 <input type='hidden' name='opponent_id' value='" . $row["id"] . "'>
                 <button type='submit' name='schedule_match'>Schedule</button>
-            </form>
-        </p><hr>";
+            </form></p><hr>";
     }
 } else {
     echo "<p>No opponents available.</p>";
