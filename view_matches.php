@@ -7,7 +7,8 @@ $result = $conn->query($sql);
 
 echo "<h2>Scheduled Fights</h2>";
 while ($row = $result->fetch_assoc()) {
-    echo "Match ID: " . $row["id"] . " - " . $row["full_name"] . " vs " . $row["opponent"] . " on " . $row["fight_date"] . "<br>";
+    echo "Match ID: " . $row["id"] . " - " . $row["full_name"] . " vs " . $row["opponent"] . " on " . $row["fight_date"];
+    echo " <button onclick='deleteMatch(" . $row["id"] . ")'>Delete</button><br>";
 }
 $conn->close();
 ?>
