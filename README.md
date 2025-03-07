@@ -8,6 +8,8 @@ Once logging in, there is an algorithm which will match a user to up to five clo
 
 **Implementation:** The Website is implemented using InfinityFree: (https://fightclubcomp333.infinityfreeapp.com)
 
+One will enter their email which will serve as their username in the database. There are two database tables: a users table, which organizes the information of all the users, and a matches table, which organizes a user's top five most suitable matches.
+
 **Work distribution:**
 - HW1: Rowan/Alex 53/47 (Rowan came up with the idea, but work distribution was very similar)
 - HW2: Rowan/Alex 47/53 (Alex did a bit more php testing)
