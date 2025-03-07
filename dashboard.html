@@ -4,22 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboardStyle.css">
     <script>
-        function fetchMatches() {
+        function fetchScheduledMatches() {
             fetch("view_matches.php")
             .then(response => response.text())
             .then(data => {
-                document.getElementById("matchesList").innerHTML = data;
+                document.getElementById("scheduledMatches").innerHTML = data;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+        
+        function fetchPotentialMatches() {
+            fetch("add_match.php")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("potentialMatches").innerHTML = data;
             })
             .catch(error => console.error("Error:", error));
         }
 
-        window.onload = fetchMatches; // Fetch matches when the page loads
+        function scheduleMatch(opponentId) {
+            let fightDate = prompt("Enter fight date (YYYY-MM-DD):");
+            if (!fightDate) return;
+            
+            let formData = new FormData();
+            formData.append("opponent_id", opponentId);
+            formData.append("fight_date", fightDate);
+
+            fetch("schedule_match.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                fetchScheduledMatches();
+            })
+            .catch(error => console.error("Error:", error));
+        }
+        
+        window.onload = function() {
+            fetchScheduledMatches();
+            fetchPotentialMatches();
+        };
     </script>
 </head>
 <body>
-    <h2>Your Scheduled Fights</h2>
-    <div id="matchesList"></div>
-    <a href="logout.php">Logout</a>
+    <div class="container">
+        <h2>Your Scheduled Fights</h2>
+        <div id="scheduledMatches"></div>
+
+        <h2>Potential Matches</h2>
+        <div id="potentialMatches"></div>
+        
+        <a href="logout.php" class="logout-btn">Logout</a>
+    </div>
 </body>
 </html>
