@@ -26,14 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["match_id"])) {
         $stmt->bind_param("i", $match_id);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Match deleted successfully!'); window.location.href = 'view_matches.php';</script>";
+            echo "<script>alert('Match deleted successfully!'); window.location.href = 'dashboard.html';</script>";
         } else {
-            echo "<script>alert('Error deleting match.'); window.location.href = 'view_matches.php';</script>";
+            echo "<script>alert('Error deleting match.'); window.location.href = 'dashboard.html';</script>";
         }
 
         $stmt->close();
     } else {
-        echo "<script>alert('You are not authorized to delete this match.'); window.location.href = 'view_matches.php';</script>";
+        echo "<script>alert('You are not authorized to delete this match.'); window.location.href = 'dashboard.html';</script>";
     }
 }
 
