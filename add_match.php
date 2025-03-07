@@ -59,8 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["schedule_match"])) {
     $opponent_id = intval($_POST["opponent_id"]);
     $fight_date = $_POST["fight_date"];
 
-    $stmt = $conn->prepare("INSERT INTO matches (id, opponent_id, fight_date) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
     $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
+
 
     if ($stmt->execute()) {
         echo "<script>alert('Match scheduled successfully!'); window.location.reload();</script>";
