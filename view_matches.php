@@ -11,6 +11,17 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
+// Get the logged-in user's name
+$stmt = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($user_name, $user_email);
+$stmt->fetch();
+$stmt->close();
+
+// Store full name in session for later checks
+$_SESSION["full_name"] = $user_name;
+
 // Retrieve all matches
 $stmt = $conn->prepare("SELECT match_id, challenger_name, opponent_name, fight_date FROM matches");
 $stmt->execute();
@@ -48,7 +59,7 @@ if ($result->num_rows > 0) {
         echo "<strong>Fight Date:</strong> $fight_date<br>";
 
         // Allow the user to edit or delete if they are part of the match
-        if ($challenger_name == $_SESSION["full_name"] || $opponent_name == $_SESSION["full_name"]) {
+        if ($challenger_name == $user_name || $opponent_name == $user_name) {
             echo "<form method='POST' action='edit_match.php' style='display:inline;'>
                     <input type='hidden' name='match_id' value='$match_id'>
                     <label for='new_date'>New Date:</label>
