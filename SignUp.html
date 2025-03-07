@@ -12,13 +12,13 @@
         <h1>Find Your Match. Fight Your Rival.</h1>
         <p>Sign up and challenge fighters based on weight, height, strength, and more.</p>
         
-        <form id="signupForm">
+        <form id="signupForm" method="POST" action="register.php">
             <input type="text" id="full_name" placeholder="Enter your name">
             <input type="email" id="email" placeholder="Enter your email">
             <input type="password" id="password" placeholder="Enter your password">
             <input type="number" id="weight" placeholder="Your weight (lbs)" min="0">
             <input type="number" id="height" placeholder="Your height (inches)" min="0">
-            <input type="number" id="bench" placeholder="Your max bench press (lbs)" min="0">
+            <input type="number" id="bench_press" placeholder="Your max bench press (lbs)" min="0">
             <select id="experience">
                 <option>Beginner</option>
                 <option>Intermediate</option>
