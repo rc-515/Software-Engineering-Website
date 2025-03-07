@@ -1,4 +1,4 @@
-<?php
+l<?php
 
 
 error_reporting(E_ALL);
@@ -9,7 +9,7 @@ include 'db_implement.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["email"];
+    $email = $_POST["email"];
     $password = $_POST["password"];
 
     $stmt = $conn->prepare("SELECT password_hash FROM users WHERE email = ?");
