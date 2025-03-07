@@ -24,7 +24,7 @@ $random_days = rand(30, 90);
 $fight_date = date('Y-m-d', strtotime("+$random_days days"));
 
 // Debugging - Print user's stats
-echo "<p><strong>Your Stats:</strong> Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
+echo "<p><strong>DEBUG: Your Stats:</strong> Weight: $user_weight, Height: $user_height, Bench: $user_bench, Experience: $user_experience</p>";
 
 // Find up to 5 potential matches based on stats and exact experience match
 $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press, experience 
@@ -42,9 +42,9 @@ $result = $stmt->get_result();
 echo "<h3>Potential Matches</h3>";
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "Opponent: " . $row["full_name"] . " (" . $row["email"] . ")<br>";
-        echo "Weight: " . $row["weight"] . " lbs, Height: " . $row["height"] . " inches, Bench Press: " . $row["bench_press"] . " lbs, Experience: " . $row["experience"] . "<br>";
-        echo "<form method='POST'>
+        echo "<p>Opponent: " . $row["full_name"] . " (" . $row["email"] . ")<br>";
+        echo "Weight: " . $row["weight"] . " lbs, Height: " . $row["height"] . " inches, Bench Press: " . $row["bench_press"] . " lbs, Experience: " . $row["experience"] . "</p>";
+        echo "<form method='POST' action=''>
                 <input type='hidden' name='opponent_id' value='" . $row["id"] . "'>
                 <input type='hidden' name='fight_date' value='" . $fight_date . "'>
                 <button type='submit' name='schedule_match'>Schedule</button>
@@ -56,20 +56,27 @@ if ($result->num_rows > 0) {
 
 // Handle scheduling a match
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["schedule_match"])) {
-    $opponent_id = intval($_POST["opponent_id"]);
-    $fight_date = $_POST["fight_date"];
-
-    $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
-    $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
-
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Match scheduled successfully!'); window.location.reload();</script>";
-    } else {
-        echo "<script>alert('Error scheduling match: " . $stmt->error . "');</script>";
-    }
+    echo "<p>DEBUG: Form submitted.</p>";
     
-    $stmt->close();
+    if (!isset($_POST["opponent_id"]) || !isset($_POST["fight_date"])) {
+        echo "<p>DEBUG: Missing form data.</p>";
+    } else {
+        $opponent_id = intval($_POST["opponent_id"]);
+        $fight_date = $_POST["fight_date"];
+        
+        echo "<p>DEBUG: Opponent ID = $opponent_id, Fight Date = $fight_date</p>";
+
+        $stmt = $conn->prepare("INSERT INTO matches (user_id, opponent_id, fight_date) VALUES (?, ?, ?)");
+        $stmt->bind_param("iis", $user_id, $opponent_id, $fight_date);
+        
+        if ($stmt->execute()) {
+            echo "<script>alert('Match scheduled successfully!'); window.location.href = window.location.href;</script>";
+        } else {
+            echo "<p>DEBUG: Error scheduling match: " . $stmt->error . "</p>";
+        }
+        
+        $stmt->close();
+    }
 }
 
 $stmt->close();
