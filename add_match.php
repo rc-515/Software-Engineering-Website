@@ -27,9 +27,9 @@ $stmt = $conn->prepare("SELECT id, full_name, email, weight, height, bench_press
                         FROM users 
                         WHERE id != ? 
                         AND experience = ? 
-                        AND ABS(weight - ?) <= 15 
-                        AND ABS(height - ?) <= 4 
-                        AND ABS(bench_press - ?) <= 25 
+                        AND ABS(weight - ?) <= 30 
+                        AND ABS(height - ?) <= 6 
+                        AND ABS(bench_press - ?) <= 50 
                         LIMIT 5");
 $stmt->bind_param("isiii", $user_id, $user_experience, $user_weight, $user_height, $user_bench);
 $stmt->execute();
