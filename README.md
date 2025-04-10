@@ -10,6 +10,100 @@ Once logging in, the user will be able to see all other users of the website. Yo
 
 One will enter their email which will serve as their username in the database. There are two database tables: a users table, which organizes the information of all the users, and a matches table, which organizes a user's top five most suitable matches.
 
+Local Setup Instructions
+
+This project contains:
+A PHP/MySQL backend with a REST API
+A React Native mobile frontend (built with Expo)
+A working relational database with users and matches
+
+Follow the steps below to run the project locally.
+
+Local Web Instructions:
+
+Setup (XAMPP + MySQL)
+Requirements:
+XAMPP
+PHP + MySQL
+phpMyAdmin
+
+Steps:
+Start XAMPP and run Apache and MySQL
+Clone the GitHub repo
+Move the Software-Engineering-Website/ folder to:
+/Applications/XAMPP/xamppfiles/htdocs/
+
+Open http://localhost/phpmyadmin
+
+Create a database called app_db
+
+Run the provided SQL to create and populate the following tables:
+users
+CREATE TABLE users (
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL PRIMARY KEY,
+    password_hash VARCHAR(255) NOT NULL,
+    weight INT NOT NULL,
+    height INT NOT NULL,
+    bench_press INT NOT NULL,
+    experience VARCHAR(255) NOT NULL
+);
+
+matches
+CREATE TABLE matches (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
+    challenger_name VARCHAR(255) NOT NULL,
+    opponent_name VARCHAR(255) NOT NULL,
+    fight_date DATE NOT NULL
+);
+
+OPTIONAL sample users
+CREATE TABLE matches (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
+    challenger_name VARCHAR(255) NOT NULL,
+    opponent_name VARCHAR(255) NOT NULL,
+    fight_date DATE NOT NULL
+);
+
+Open and verify this works:
+http://localhost/Software-Engineering-Website/index.html
+
+Make sure your db_implement.php contains the correct local credentials:
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "app_db";
+
+React Native Instructions:
+
+Requirements:
+Node.js and npm
+Expo CLI
+Android Studio (for emulator) or Expo Go app (for real phone testing)
+
+Open terminal from Software-Engineering-Website folder
+Navigate to the React Native project folder:
+  cd fightclub-app
+
+Install dependencies:
+  npm install
+
+Edit api.js with your local IP address
+Replace http://localhost/... with your actual local IP, e.g.:
+  const API_BASE_URL = "http://192.168.X.X/Software-Engineering-Website/api";
+
+Start the Expo development server:
+  npx expo start
+
+Run the app:
+Open Android Studio, start an emulator, and press "Run on Android device"
+OR scan the QR code using the Expo Go app on your real phone
+
+The mobile app will now let you register, log in, view matches, and create/edit/delete fights — all using the REST API.
+
+
+
 **Work distribution:**
 - HW1: Rowan/Alex 53/47 (Rowan came up with the idea, but work distribution was very similar)
 - HW2: Rowan/Alex 47/53 (Alex did a bit more php testing)
@@ -19,4 +113,14 @@ We consulted ChatGPT for help with understanding HTML and CSS, as well as debugg
 Alex XAMPP Screenshot: ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
 
 Rowan XAMPP Screenshot (sorry it's late!) <img width="1470" alt="image" src="https://github.com/user-attachments/assets/c5022e00-5e79-4fde-a9ed-17d9293a6c5c" />
+
+Alex Postman Testing (Comprehensive):
+<img width="1319" alt="Screenshot 2025-04-09 at 11 36 57 AM" src="https://github.com/user-attachments/assets/609c9788-e887-4488-9f0c-9e62e9cb5af8" />
+<img width="1319" alt="Screenshot 2025-04-09 at 11 37 58 AM" src="https://github.com/user-attachments/assets/ee620263-a300-4a0d-82ba-9fd35d619dd5" />
+<img width="1318" alt="Screenshot 2025-04-09 at 11 38 37 AM" src="https://github.com/user-attachments/assets/9b4dfeac-ae94-4cc8-a2b8-a5f619cd236b" />
+<img width="1320" alt="Screenshot 2025-04-09 at 11 39 31 AM" src="https://github.com/user-attachments/assets/361c766e-b99c-4ca1-94ec-47cc8f2a6ffa" />
+<img width="1319" alt="Screenshot 2025-04-09 at 11 57 23 AM" src="https://github.com/user-attachments/assets/74451adb-b888-4336-b116-22609ab010fe" />
+<img width="1316" alt="Screenshot 2025-04-09 at 12 00 19 PM" src="https://github.com/user-attachments/assets/1b05ad93-d575-4e96-aaff-0ae32905db5d" />
+
+
 
