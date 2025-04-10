@@ -19,7 +19,7 @@ export default function DashboardScreen({ route, navigation }) {
   return (
     <View style={{ padding: 20}}>
       <Text style = {{fontSize: 20}}> Welcome, {user.full_name}</Text>
-      <Button title ="Create Match" onPress={() => navigation.navigate('CreateMatch', { match: item })} />
+      <Button title="Create Match" onPress={() => navigation.navigate('CreateMatch', { user })} />
       <FlatList
         data={matches}
         keyExtractor={(item) => item.match_id.toString()}
@@ -29,7 +29,7 @@ export default function DashboardScreen({ route, navigation }) {
             <Text>Date: {item.fight_date}</Text>
             {(item.challenger_name === email || item.opponent_name === email) && (
                 <>
-                  <Button title="Edit" onPress={() => navigation.navigate('EditMatch', { match: item })} />
+                  <Button title="Edit" onPress={() => navigation.navigate('EditMatch', { match: item, user })} />
                   <Button title="Delete" onPress={async () => {
                     await deleteMatch(item.match_id);
                     load();
