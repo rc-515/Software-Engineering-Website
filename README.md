@@ -17,3 +17,6 @@ One will enter their email which will serve as their username in the database. T
 We consulted ChatGPT for help with understanding HTML and CSS, as well as debugging php files.
 
 Alex XAMPP Screenshot: ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
+
+Rowan XAMPP Screenshot (sorry it's late!) <img width="1470" alt="image" src="https://github.com/user-attachments/assets/c5022e00-5e79-4fde-a9ed-17d9293a6c5c" />
+
