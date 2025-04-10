@@ -38,6 +38,7 @@ Open http://localhost/phpmyadmin
 Create a database called app_db
 
 Run the provided SQL to create and populate the following tables:
+
 users
 
 CREATE TABLE users (
