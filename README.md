@@ -113,7 +113,7 @@ The mobile app will now let you register, log in, view matches, and create/edit/
 - HW2: Rowan/Alex 47/53 (Alex did a bit more php testing)
 - HW3: 50/50, Alex did more testing, Rowan fixed app API in emulator
 
-We consulted ChatGPT for help with understanding HTML and CSS, as well as debugging php files.
+We consulted ChatGPT for help with understanding HTML, CSS, and Java, as well as debugging php files.
 
 Alex XAMPP Screenshot: ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
 
