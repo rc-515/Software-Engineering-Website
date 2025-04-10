@@ -111,12 +111,20 @@ The mobile app will now let you register, log in, view matches, and create/edit/
 **Work distribution:**
 - HW1: Rowan/Alex 53/47 (Rowan came up with the idea, but work distribution was very similar)
 - HW2: Rowan/Alex 47/53 (Alex did a bit more php testing)
+- HW3: 50/50, Alex did more testing, Rowan fixed app API in emulator
 
 We consulted ChatGPT for help with understanding HTML and CSS, as well as debugging php files.
 
 Alex XAMPP Screenshot: ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
 
-Rowan XAMPP Screenshot (sorry it's late!) <img width="1470" alt="image" src="https://github.com/user-attachments/assets/c5022e00-5e79-4fde-a9ed-17d9293a6c5c" />
+Rowan XAMPP Screenshot (sorry it's late!): <img width="1470" alt="Screenshot of Rowan's XAMPP phpMyAdmin" src="https://github.com/user-attachments/assets/d8794f91-06e3-4da2-b669-fc040d098515" />
+
+
+Rowan Sample Postman Testing:
+<img width="1258" alt="Screenshot 1 - Rowan's Postman" src="https://github.com/user-attachments/assets/0ed2453f-ceb4-4f8f-b2bb-c103f847947f" />
+<img width="1270" alt="Screenshot 2 - Rowan's Postman" src="https://github.com/user-attachments/assets/552f2cf2-e1a7-48a3-bd23-b640d27fdbde" />
+<img width="1278" alt="Screenshot 3 - Rowan's Postman" src="https://github.com/user-attachments/assets/90013c3d-59fb-4a25-91d0-d1a7829fcf75" />
+
 
 Alex Postman Testing (Comprehensive):
 <img width="1319" alt="Screenshot 2025-04-09 at 11 36 57 AM" src="https://github.com/user-attachments/assets/609c9788-e887-4488-9f0c-9e62e9cb5af8" />
