@@ -19,7 +19,7 @@ A working relational database with users and matches
 
 Follow the steps below to run the project locally.
 
-Local Web Instructions:
+**Local Web Instructions:**
 
 Setup (XAMPP + MySQL)
 Requirements:
@@ -79,7 +79,7 @@ $user = "root";
 $password = "";
 $database = "app_db";
 
-React Native Instructions:
+**React Native Instructions:**
 
 Requirements:
 Node.js and npm
