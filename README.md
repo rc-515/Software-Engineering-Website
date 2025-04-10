@@ -39,6 +39,7 @@ Create a database called app_db
 
 Run the provided SQL to create and populate the following tables:
 users
+
 CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -51,6 +52,7 @@ CREATE TABLE users (
 );
 
 matches
+
 CREATE TABLE matches (
     match_id INT AUTO_INCREMENT PRIMARY KEY,
     challenger_name VARCHAR(255) NOT NULL,
@@ -59,6 +61,7 @@ CREATE TABLE matches (
 );
 
 OPTIONAL sample users
+
 CREATE TABLE matches (
     match_id INT AUTO_INCREMENT PRIMARY KEY,
     challenger_name VARCHAR(255) NOT NULL,
