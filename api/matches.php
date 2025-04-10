@@ -16,26 +16,42 @@ if ($method === 'OPTIONS') {
 
 switch ($method) {
     case 'GET':
-        // Optional filtering by email
+        // Check if the request is for users
+        if (isset($_GET['users']) && $_GET['users'] === 'true') {
+            $stmt = $conn->prepare("SELECT full_name, email, weight, height, bench_press, experience FROM users");
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $users = [];
+    
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
+    
+            echo json_encode($users);
+            break;
+        }
+    
+        // Existing match logic
         $email = $_GET['email'] ?? null;
-
+    
         if ($email) {
             $stmt = $conn->prepare("SELECT * FROM matches WHERE challenger_name = ? OR opponent_name = ?");
             $stmt->bind_param("ss", $email, $email);
         } else {
             $stmt = $conn->prepare("SELECT * FROM matches");
         }
-
+    
         $stmt->execute();
         $result = $stmt->get_result();
         $matches = [];
-
+    
         while ($row = $result->fetch_assoc()) {
             $matches[] = $row;
         }
-
+    
         echo json_encode($matches);
         break;
+    
 
     case 'POST':
         $data = json_decode(file_get_contents("php://input"), true);

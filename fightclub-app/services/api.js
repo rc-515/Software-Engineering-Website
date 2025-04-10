@@ -10,6 +10,8 @@ const api = axios.create({
   },
 });
 
+export const getAllUsers = () => api.get('/matches.php?users=true');
+
 // === Auth ===
 export const loginUser = (credentials) => api.post('/login.php', credentials);
 export const registerUser = (data) => api.post('/signup.php', data);
