@@ -23,6 +23,8 @@ if ($full_name && password_verify($password, $password_hash)) {
     http_response_code(401);
     echo json_encode(["success" => false, "message" => "Invalid credentials"]);
 }
+
 $stmt->close();
 $conn->close();
 ?>
+
