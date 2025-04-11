@@ -1,7 +1,7 @@
 // services/api.js
 import axios from 'axios';
 
-const API_BASE_URL = 'http://129.133.72.219/Software-Engineering-Website/api'; // ← Replace with your local IP
+const API_BASE_URL = 'http://localhost/Software-Engineering-Website/api'; // ← Replace with your local IP
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,6 +9,8 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export const getAllUsers = () => api.get('/matches.php?users=true');
 
 // === Auth ===
 export const loginUser = (credentials) => api.post('/login.php', credentials);
