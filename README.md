@@ -4,58 +4,147 @@
 
 ---
 
+## Project Description
+
 **Repo contains:**  
 A file _index.html_ which serves as the landing page, a file _indexStyle.css_ which is the styling for the landing page, a file _SignUp.html_ which houses the signup form, a file _SignUpStyle.css_ which is the styling for the signup and login pages, and an images folder which has the files for the images that appear on the website. We also have a README, license, and .gitignore. _terms.html_ contains the terms and conditions.  
-As of Friday, March 7, at 10:00 AM, the repo now also contains a _login.php_, which allows users to access their dashboard in _dashboard.html_ (with the CSS page _dashboardStyle.css_), and a _logout.php_, which gives a logout page. _db_implement.php_ manages the database of emails, passwords, and other information and connects it to InfinityFree. _register.php_ signs a user up. CRUD is implemented to manage users with:
 
-- **Create:** _add_match.php_
-- **Read:** _view_matches.php_
-- **Update:** _edit_match.php_
-- **Delete:** _delete_match.php_
+As of Friday, March 7, at 10:00 AM, the repo now also contains:
 
-Once logging in, the user will be able to see all other users of the website. You may schedule a fight with another person, and it will choose a date for you in the next 30–90 days. You may reschedule if you are involved in the match. We also give a list of all other matches so all users can show up and watch.
+- _login.php_: lets users log in and access _dashboard.html_ (styled by _dashboardStyle.css_)
+- _logout.php_: handles logout
+- _db_implement.php_: connects to the InfinityFree-hosted database
+- _register.php_: signs users up
+- **CRUD**:
+  - Create: _add_match.php_
+  - Read: _view_matches.php_
+  - Update: _edit_match.php_
+  - Delete: _delete_match.php_
+
+Once logged in, users can:
+- View other users
+- Schedule fights (random date 30–90 days out)
+- Reschedule own matches
+- View all upcoming matches
 
 ---
 
-## Implementation
+## Live Deployment
 
-The Website is implemented using InfinityFree:  
+**Hosted via InfinityFree:**  
 [https://fightclubcomp333.infinityfreeapp.com](https://fightclubcomp333.infinityfreeapp.com)
 
-One will enter their email which will serve as their username in the database. There are two database tables: a users table, which organizes the information of all the users, and a matches table, which organizes a user's top five most suitable matches.
-
 ---
 
-## Local Setup Instructions
+## Running the App Locally
 
-This project contains:
-- A PHP/MySQL backend with a REST API
-- A React Native mobile frontend (built with Expo)
-- A working relational database with users and matches
+### Backend Setup (XAMPP)
 
-Follow the steps below to run the project locally.
-
----
-
-### Local Web Instructions
-
-#### Setup (XAMPP + MySQL)
-
-**Requirements:**
-- XAMPP
-- PHP + MySQL
+#### Requirements:
+- XAMPP (Apache + MySQL)
 - phpMyAdmin
 
-**Steps:**
-1. Start XAMPP and run Apache and MySQL
-2. Clone the GitHub repo
-3. Move the `Software-Engineering-Website/` folder to:  
-   `/Applications/XAMPP/xamppfiles/htdocs/`
-4. Open [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-5. Create a database called `app_db`
-6. Run the provided SQL to create and populate the following tables:
+#### Steps:
 
-**users**
+1. Install XAMPP  
+2. Clone repo to `htdocs/`:
+
+   ```bash
+   cd /Applications/XAMPP/xamppfiles/htdocs
+   git clone https://github.com/YOUR_USERNAME/Software-Engineering-Website.git
+   ```
+
+3. Start Apache and MySQL in XAMPP  
+4. Open [http://localhost/phpmyadmin](http://localhost/phpmyadmin)  
+5. Create a database called `app_db`  
+6. Import database schema:  
+   - Go to `Import` → select `db_schema.sql` if provided  
+7. Update `/api/db_implement.php` with your credentials:
+
+   ```php
+   $host = "localhost";
+   $user = "root";
+   $password = "";
+   $database = "app_db";
+   ```
+
+8. Open in browser:  
+   [http://localhost/Software-Engineering-Website/index.html](http://localhost/Software-Engineering-Website/index.html)
+
+---
+
+### Mobile App Setup (React Native + Expo)
+
+#### Requirements:
+- Node.js + npm
+- Expo CLI
+- Android Studio (or Expo Go on real device)
+
+#### Steps:
+
+1. Navigate to React Native folder:
+
+   ```bash
+   cd fightclub-app
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   npm install react-native-deck-swiper
+   ```
+
+3. Update `/services/api.js` with your local IP:
+
+   ```js
+   const API_BASE_URL = "http://YOUR_LOCAL_IP/Software-Engineering-Website/api";
+   ```
+
+4. Run emulator:
+
+   ```bash
+   npx expo start --android
+   ```
+
+---
+
+## API Endpoints
+
+| Endpoint               | Method | Description                  |
+|------------------------|--------|------------------------------|
+| `/api/register.php`    | POST   | Register new user            |
+| `/api/login.php`       | POST   | Log in user                  |
+| `/api/matchmaking.php` | GET    | Get list of potential fights |
+| `/api/swipe.php`       | POST   | Submit swipe result          |
+| `/api/matches.php`     | GET    | Get list of scheduled fights |
+
+---
+
+## Testing Instructions
+
+### Postman
+
+1. Log in via `POST /api/login.php`
+2. Get opponents via `GET /api/matchmaking.php`
+3. Record match interest via `POST /api/swipe.php`
+
+### PHPUnit
+
+If you have PHPUnit installed:
+
+```bash
+./vendor/bin/phpunit tests/UserTest.php
+```
+
+Should return: `OK (3 tests)`
+
+---
+
+## Database Schema
+
+### `users` Table
+
 ```sql
 CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
@@ -69,7 +158,8 @@ CREATE TABLE users (
 );
 ```
 
-**matches**
+### `matches` Table
+
 ```sql
 CREATE TABLE matches (
     match_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,68 +169,13 @@ CREATE TABLE matches (
 );
 ```
 
-**OPTIONAL sample users**
-```sql
-CREATE TABLE matches (
-    match_id INT AUTO_INCREMENT PRIMARY KEY,
-    challenger_name VARCHAR(255) NOT NULL,
-    opponent_name VARCHAR(255) NOT NULL,
-    fight_date DATE NOT NULL
-);
-```
-
-7. Open and verify this works:  
-   [http://localhost/Software-Engineering-Website/index.html](http://localhost/Software-Engineering-Website/index.html)
-
-8. Make sure your `db_implement.php` contains the correct local credentials:
-```php
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "app_db";
-```
-
 ---
 
-### React Native Instructions
-
-**Requirements:**
-- Node.js and npm
-- Expo CLI
-- Android Studio (for emulator) or Expo Go app (for real phone testing)
-
-**Steps:**
-1. Open terminal from the `Software-Engineering-Website` folder
-2. Navigate to the React Native project folder:
-```bash
-cd fightclub-app
-```
-3. Install dependencies:
-```bash
-npm install
-```
-4. Edit `api.js` with your local IP address  
-   Replace `http://localhost/...` with your actual local IP, e.g.:
-```javascript
-const API_BASE_URL = "http://192.168.X.X/Software-Engineering-Website/api";
-```
-5. Start the Expo development server:
-```bash
-npx expo start
-```
-6. Run the app:
-   - Open Android Studio, start an emulator, and press "Run on Android device"
-   - OR scan the QR code using the Expo Go app on your real phone
-
-The mobile app will now let you register, log in, view matches, and create/edit/delete fights — all using the REST API.
-
----
-
-## Work distribution
+## Work Distribution
 
 - **HW1:** Rowan/Alex 53/47 (Rowan came up with the idea, but work distribution was very similar)
 - **HW2:** Rowan/Alex 47/53 (Alex did a bit more PHP testing)
-- **HW3:** 50/50 (Alex did more testing, Rowan fixed app API in emulator)
+- **HW3:** 50/50 — Alex did more testing, Rowan fixed app API in emulator
 
 We consulted ChatGPT for help with understanding HTML, CSS, and Java, as well as debugging PHP files.
 
@@ -151,12 +186,12 @@ We consulted ChatGPT for help with understanding HTML, CSS, and Java, as well as
 **Alex XAMPP Screenshot:**  
 ![Screenshot 2025-03-06 at 8 02 37 PM](https://github.com/user-attachments/assets/96d15449-60e7-4a0b-8484-ed472cc614c4)
 
-**Rowan XAMPP Screenshot (sorry it's late!):**  
+**Rowan XAMPP Screenshot:**  
 <img width="1470" alt="Screenshot of Rowan's XAMPP phpMyAdmin" src="https://github.com/user-attachments/assets/d8794f91-06e3-4da2-b669-fc040d098515" />
 
 ---
 
-**Rowan Sample Postman Testing:**
+### Rowan Postman Testing
 
 <img width="1258" alt="Screenshot 1 - Rowan's Postman" src="https://github.com/user-attachments/assets/0ed2453f-ceb4-4f8f-b2bb-c103f847947f" />
 <img width="1270" alt="Screenshot 2 - Rowan's Postman" src="https://github.com/user-attachments/assets/552f2cf2-e1a7-48a3-bd23-b640d27fdbde" />
@@ -164,7 +199,7 @@ We consulted ChatGPT for help with understanding HTML, CSS, and Java, as well as
 
 ---
 
-**Alex Postman Testing (Comprehensive):**
+### Alex Postman Testing (Comprehensive)
 
 <img width="1319" alt="Screenshot 2025-04-09 at 11 36 57 AM" src="https://github.com/user-attachments/assets/609c9788-e887-4488-9f0c-9e62e9cb5af8" />
 <img width="1319" alt="Screenshot 2025-04-09 at 11 37 58 AM" src="https://github.com/user-attachments/assets/ee620263-a300-4a0d-82ba-9fd35d619dd5" />
