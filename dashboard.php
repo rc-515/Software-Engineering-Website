@@ -61,5 +61,6 @@ $user_email = $_SESSION["user_email"];
             fetchPotentialMatches();
         };
     </script>
+    <a href="swipe.html"><button>Find New Fights</button></a>
 </body>
 </html>
