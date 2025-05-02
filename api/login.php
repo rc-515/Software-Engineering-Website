@@ -14,6 +14,7 @@ $stmt->bind_result($full_name, $password_hash);
 $stmt->fetch();
 
 if ($full_name && password_verify($password, $password_hash)) {
+    http_response_code(201);
     echo json_encode([
         "success" => true,
         "full_name" => $full_name,

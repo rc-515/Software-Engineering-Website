@@ -123,6 +123,268 @@ Once logged in, users can:
 
 ## Testing Instructions
 
+## 🧪 Backend Testing Instructions
+
+This project uses **PHPUnit** to test the backend functionality. Follow these instructions to set up and run the tests in your local development environment.
+
+---
+
+### ✅ Prerequisites
+
+Before running the tests, ensure the following:
+
+1. You are running a **local Apache server with PHP** (e.g., XAMPP).
+2. You have **MySQL** running locally and your database is created with the required schema.
+3. You have **Composer installed** globally or locally.
+
+---
+
+### 📂 1. Clone the repository and install dependencies
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd Software-Engineering-Website
+composer install
+🗄️ 2. Database setup
+Make sure your MySQL database contains a users table with the following schema:
+
+sql
+Copy
+Edit
+CREATE TABLE users (
+    username VARCHAR(255) PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    weight INT NOT NULL,
+    height INT NOT NULL,
+    bench_press INT NOT NULL,
+    experience ENUM('Beginner','Intermediate','Advanced') NOT NULL
+);
+👤 3. Required test user
+Before running the tests, insert the following user into your database (replace your_db_name with your actual database name):
+
+sql
+Copy
+Edit
+INSERT INTO users (username, email, full_name, password_hash, weight, height, bench_press, experience)
+VALUES (
+    '1234@test.com',
+    '1234@test.com',
+    'Alex Glotzer',
+    '$2y$10$8pm77nR6VMI9R3i3rk3AUeAwDD83FK7Q7aOZ4yFfW8fOTKeBYJbny', -- hashed '1234567890'
+    180, 72, 225, 'Beginner'
+);
+✅ The hashed password corresponds to plaintext password 1234567890.
+
+💡 If you prefer to hash manually, use PHP:
+
+php
+Copy
+Edit
+echo password_hash('1234567890', PASSWORD_DEFAULT);
+🖥️ 4. Configure server & API endpoints
+Ensure your server is running at http://localhost.
+
+All API files (e.g., login.php, signup.php) should be located under /api/ inside your project.
+
+Confirm db_implement.php points to your local database credentials:
+
+php
+Copy
+Edit
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "app_db";
+🏃 5. Run PHPUnit tests
+Inside the project folder, run:
+
+bash
+Copy
+Edit
+/Applications/XAMPP/xamppfiles/bin/php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+If PHP is globally installed, you can also use:
+
+bash
+Copy
+Edit
+php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+✅ This will execute the test suite located in /tests/UserTest.php.
+
+📝 Test cases
+Test	Description
+testGet_UserList	GET /api/users.php returns HTTP 200
+testPost_CreateUser	POST /api/signup.php returns HTTP 201 for valid signup
+testPost_LoginUser	POST /api/login.php returns HTTP 201 for valid login
+testPost_FailedLogin	POST /api/login.php returns HTTP 401 for invalid login
+
+⚠️ Common issues
+Ensure your Apache server is running before testing.
+
+Ensure the API endpoints are accessible at http://localhost/api/*.php.
+
+Ensure the required user 1234@test.com exists in the users table.
+
+✅ After following these instructions, you should be able to successfully run the PHPUnit test suite locally!
+
+🏁 Example test run output
+bash
+Copy
+Edit
+PHPUnit 11.5.x by Sebastian Bergmann and contributors.
+
+....                                                                4 / 4 (100%)
+
+Time: 00:00.045, Memory: 8.00 MB
+
+OK (4 tests, 4 assertions)
+yaml
+Copy
+Edit
+
+---
+
+✅ This Markdown will render beautifully in GitHub or any Markdown viewer! Let me know if you’d like to integrate additional sections.
+
+
+
+
+
+You said:
+Provide this as one contiguous piece of markdown text for seamless copying
+
+
+ChatGPT said:
+Absolutely! Here's the entire documentation in one seamless Markdown block for easy copy-pasting into your README.md:
+
+markdown
+Copy
+Edit
+## 🧪 Backend Testing Instructions
+
+This project uses **PHPUnit** to test the backend functionality. Follow these instructions to set up and run the tests in your local development environment.
+
+---
+
+### ✅ Prerequisites
+
+Before running the tests, ensure the following:
+
+1. You are running a **local Apache server with PHP** (e.g., XAMPP).
+2. You have **MySQL** running locally and your database is created with the required schema.
+3. You have **Composer installed** globally or locally.
+
+---
+
+### 📂 1. Clone the repository and install dependencies
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd Software-Engineering-Website
+composer install
+🗄️ 2. Database setup
+Make sure your MySQL database contains a users table with the following schema:
+
+sql
+Copy
+Edit
+CREATE TABLE users (
+    username VARCHAR(255) PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    weight INT NOT NULL,
+    height INT NOT NULL,
+    bench_press INT NOT NULL,
+    experience ENUM('Beginner','Intermediate','Advanced') NOT NULL
+);
+👤 3. Required test user
+Before running the tests, insert the following user into your database (replace your_db_name with your actual database name):
+
+sql
+Copy
+Edit
+INSERT INTO users (username, email, full_name, password_hash, weight, height, bench_press, experience)
+VALUES (
+    '1234@test.com',
+    '1234@test.com',
+    'Alex Glotzer',
+    '$2y$10$8pm77nR6VMI9R3i3rk3AUeAwDD83FK7Q7aOZ4yFfW8fOTKeBYJbny', -- hashed '1234567890'
+    180, 72, 225, 'Beginner'
+);
+✅ The hashed password corresponds to plaintext password 1234567890.
+
+💡 If you prefer to hash manually, use PHP:
+
+php
+Copy
+Edit
+echo password_hash('1234567890', PASSWORD_DEFAULT);
+🖥️ 4. Configure server & API endpoints
+Ensure your server is running at http://localhost.
+
+All API files (e.g., login.php, signup.php) should be located under /api/ inside your project.
+
+Confirm db_implement.php points to your local database credentials:
+
+php
+Copy
+Edit
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "app_db";
+🏃 5. Run PHPUnit tests
+Inside the project folder, run:
+
+bash
+Copy
+Edit
+/Applications/XAMPP/xamppfiles/bin/php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+If PHP is globally installed, you can also use:
+
+bash
+Copy
+Edit
+php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+✅ This will execute the test suite located in /tests/UserTest.php.
+
+📝 Test cases
+Test	Description
+testGet_UserList	GET /api/users.php returns HTTP 200
+testPost_CreateUser	POST /api/signup.php returns HTTP 201 for valid signup
+testPost_LoginUser	POST /api/login.php returns HTTP 201 for valid login
+testPost_FailedLogin	POST /api/login.php returns HTTP 401 for invalid login
+
+⚠️ Common issues
+Ensure your Apache server is running before testing.
+
+Ensure the API endpoints are accessible at http://localhost/api/*.php.
+
+Ensure the required user 1234@test.com exists in the users table.
+
+✅ After following these instructions, you should be able to successfully run the PHPUnit test suite locally!
+
+🏁 Example test run output
+bash
+Copy
+Edit
+PHPUnit 11.5.x by Sebastian Bergmann and contributors.
+
+....                                                                4 / 4 (100%)
+
+Time: 00:00.045, Memory: 8.00 MB
+
+OK (4 tests, 4 assertions)
+yaml
+Copy
+Edit
+
+---
+
+✅ Let me know if you'd like this tailored for a specific GitHub repo name or folder! Copy-paste ready for your `README.md`.
+
 ### Postman
 
 1. Log in via `POST /api/login.php`
