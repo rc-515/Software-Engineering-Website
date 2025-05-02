@@ -23,9 +23,8 @@ export const updateMatch = (id, matchData) => api.put(`/matches.php?id=${id}`, m
 export const deleteMatch = (id) => api.delete(`/matches.php?id=${id}`);
 
 // === Swipe ===
-export const getPotentialMatches = (email) => {
-    return axios.post(`${API_BASE_URL}/matchmaking.php`, { email });
-  };
+export const getPotentialMatches = (email) => api.post('/matchmaking.php', { email });
 export const swipeMatch = (data) => api.post('/swipe.php', data);
 
+  
 export default api;
