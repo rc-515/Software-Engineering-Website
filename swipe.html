@@ -19,6 +19,7 @@
     <div class="buttons">
         <button onclick="swipe('accepted')">Accept</button>
         <button onclick="swipe('rejected')">Reject</button>
+        <div id="statusMessage" style="margin-top: 10px; color: #ffcc00;"></div>
     </div>
 
     <button id="backButton" onclick="goBack()">Back to Dashboard</button>
@@ -32,40 +33,44 @@ async function fetchMatches() {
     try {
         const response = await fetch('api/matchmaking.php');
         const data = await response.json();
-        matches = data.matches;
+        matches = data;
         currentIndex = 0;
         showNextMatch();
     } catch (error) {
         console.error('Failed to fetch matches:', error);
+        document.getElementById('name').textContent = 'Error loading matches.';
     }
 }
 
 function showNextMatch() {
+    document.getElementById('statusMessage').textContent = ""; // clear message
     if (currentIndex >= matches.length) {
         document.getElementById('card').innerHTML = "<h3>No more matches!</h3>";
         return;
     }
     const match = matches[currentIndex];
-    document.getElementById('name').textContent = match.full_name;
-    document.getElementById('stats').textContent = 
-      `Weight: ${match.weight} lbs | Height: ${match.height} in | Bench: ${match.bench_press} lbs | Exp: ${match.experience}`;
+    document.getElementById('name').textContent = match.opponent_name;
+    document.getElementById('stats').textContent =
+        `Weight: ${match.weight} lbs | Height: ${match.height} in | Bench: ${match.bench_press} lbs | Exp: ${match.experience}`;
     document.getElementById('win-prob').textContent = `Win Probability: ${match.win_probability}%`;
 }
 
 async function swipe(result) {
     if (currentIndex >= matches.length) return;
-    const opponentUsername = matches[currentIndex].username;
+    const opponentName = matches[currentIndex].opponent_name;
+
+    document.getElementById('statusMessage').textContent = `Match ${result}`;
 
     try {
         await fetch('api/swipe.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                opponent_username: opponentUsername,
+                opponent_name: opponentName,
                 swipe_result: result
             })
         });
-        console.log(`Swiped ${result} on`, opponentUsername);
+        console.log(`Swiped ${result} on`, opponentName);
     } catch (error) {
         console.error('Swipe failed:', error);
     }
@@ -75,7 +80,7 @@ async function swipe(result) {
 }
 
 function goBack() {
-    window.location.href = 'dashboard.html';
+    window.location.href = 'dashboard.php';
 }
 
 fetchMatches();
