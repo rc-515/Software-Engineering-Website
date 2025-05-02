@@ -21,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
         <Stack.Screen name="CreateMatch" component={CreateMatchScreen} />
         <Stack.Screen name="EditMatch" component={MatchEditScreen} />
+        <Stack.Screen name="Swipe" component={SwipeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
