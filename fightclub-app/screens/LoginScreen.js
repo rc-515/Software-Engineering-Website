@@ -1,53 +1,108 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
-import axios from "axios";
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { loginUser } from '../services/api';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post("http://10.0.2.2/Software-Engineering-Website/api/login.php", {
-        email,
-        password,
-      });
-      navigation.navigate("Dashboard", { user: response.data });
-    } catch(err) {
-        console.log("Full error:", JSON.stringify(err, null, 2));
-      Alert.alert("Login Failed", err.response?.data?.message || "Unknown error");
-    }
-  };
+  const login = async () => {
+    if (!email || !password) {
+      return Alert.alert("Missing Info", "Please enter email and password");
+    }
 
-  return (
-    <View style={{ padding: 20 }}>
-      <Text>Email:</Text>
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        placeholder="Enter your email"
-        style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
-      />
+    try {
+      const response = await loginUser({ email, password });
+      navigation.navigate('Dashboard', { user: response.data });
+    } catch (err) {
+      Alert.alert("Login Failed", err.response?.data?.error || "Invalid credentials");
+    }
+  };
 
-      <Text>Password:</Text>
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        placeholder="Enter your password"
-        style={{ borderWidth: 1, marginBottom: 20, padding: 8 }}
-      />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome Back!</Text>
+      <Text style={styles.subtitle}>
+        Log in to continue your journey and find your next match.
+      </Text>
 
-      <Button title="Login" onPress={handleLogin} />
+      <View style={styles.formBox}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          placeholderTextColor="#94a3b8"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          placeholderTextColor="#94a3b8"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-      <Text
-        style={{ marginTop: 20, color: "blue" }}
-        onPress={() => navigation.navigate("Register")}
-      >
-        Don't have an account? Register here.
-      </Text>
-    </View>
-  );
+        <View style={styles.buttonWrapper}>
+          <Button title="Log In" color="#ef4444" onPress={login} />
+        </View>
+      </View>
+
+      <Text style={styles.footerText}>
+        Don't have an account?{' '}
+        <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
+          Sign up.
+        </Text>
+      </Text>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#0f172a',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 30,
+  },
+  title: {
+    color: '#ffffff',
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtitle: {
+    color: '#cbd5e1',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 25,
+  },
+  formBox: {
+    backgroundColor: '#1e293b',
+    borderRadius: 10,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400,
+  },
+  input: {
+    backgroundColor: '#334155',
+    color: '#ffffff',
+    padding: 12,
+    marginBottom: 15,
+    borderRadius: 6,
+  },
+  buttonWrapper: {
+    marginTop: 5,
+  },
+  footerText: {
+    color: '#cbd5e1',
+    marginTop: 25,
+    textAlign: 'center',
+  },
+  link: {
+    color: '#ef4444',
+    fontWeight: 'bold',
+  },
+});

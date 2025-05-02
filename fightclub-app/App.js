@@ -9,6 +9,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import CreateMatchScreen from './screens/CreateMatchScreen';
 import MatchEditScreen from './screens/MatchEditScreen';
+import SwipeScreen from './screens/SwipeScreen';
 
 const Stack = createNativeStackNavigator();
 

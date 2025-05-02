@@ -1,7 +1,7 @@
 // services/api.js
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost/Software-Engineering-Website/api'; // ← Replace with your local IP
+const API_BASE_URL = 'http://172.21.222.30/Software-Engineering-Website/api'; // ← Replace with your local IP
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -23,7 +23,9 @@ export const updateMatch = (id, matchData) => api.put(`/matches.php?id=${id}`, m
 export const deleteMatch = (id) => api.delete(`/matches.php?id=${id}`);
 
 // === Swipe ===
-export const getPotentialMatches = () => api.get('/matchmaking.php');
+export const getPotentialMatches = (email) => {
+    return axios.post(`${API_BASE_URL}/matchmaking.php`, { email });
+  };
 export const swipeMatch = (data) => api.post('/swipe.php', data);
 
 export default api;
