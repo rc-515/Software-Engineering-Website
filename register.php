@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $height = intval($_POST["height"]);
     $bench_press = intval($_POST["bench_press"]);
     $experience = $_POST["experience"];
+    $username = $email;
 
     // Check if fields are empty
     if (empty($full_name) || empty($email) || empty($password) || empty($weight) || empty($height) || empty($bench_press) || empty($experience)) {
@@ -45,8 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert user into database
-    $stmt = $conn->prepare("INSERT INTO users (full_name, email, password_hash, weight, height, bench_press, experience) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssiiis", $full_name, $email, $hashed_password, $weight, $height, $bench_press, $experience);
+    $stmt = $conn->prepare("
+        INSERT INTO users (full_name, email, username, password_hash, weight, height, bench_press, experience) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param("ssssiiis", $full_name, $email, $email, $hashed_password, $weight, $height, $bench_press, $experience);
 
     if ($stmt->execute()) {
         echo "Registration successful!";
