@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import { getPotentialMatches, swipeMatch } from '../services/api';
+import { getPotentialMatches, swipeMatch, createMatch } from '../services/api';
 
 export default function SwipeScreen({ navigation, route }) {
   const [matches, setMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const user = route?.params?.user;
 
   useEffect(() => {
@@ -16,7 +15,6 @@ export default function SwipeScreen({ navigation, route }) {
   const fetchMatches = async () => {
     try {
       const response = await getPotentialMatches(user.email);
-      console.log("Matchmaking API response:", response.data);
       setMatches(response.data?.matches || []);
     } catch (err) {
       console.error('Failed to fetch matches:', err);
@@ -26,17 +24,36 @@ export default function SwipeScreen({ navigation, route }) {
     }
   };
 
+  const generateRandomDate = () => {
+    const today = new Date();
+    const offsetDays = Math.floor(Math.random() * 60) + 30;
+    const fightDate = new Date(today.setDate(today.getDate() + offsetDays));
+    return fightDate.toISOString().split("T")[0];
+  };
+
   const handleSwipe = async (index, direction) => {
     if (index >= matches.length) return;
     const opponent = matches[index];
     const swipeResult = direction === 'right' ? 'accepted' : 'rejected';
 
     try {
-      await swipeMatch({
+      const response = await swipeMatch({
+        email: user.email,
         opponent_username: opponent.username,
         swipe_result: swipeResult,
       });
-      console.log(`${swipeResult} swipe recorded for`, opponent.username);
+      console.log("Swipe result for", opponent.username, "→", response.data);
+
+      if (swipeResult === 'accepted' && response.data.result === 'match') {
+        const fight_date = generateRandomDate();
+        await createMatch({
+          challenger_name: user.email,
+          opponent_name: opponent.username,
+          fight_date,
+        });
+        Alert.alert("Match Found!", "A fight has been scheduled.");
+      }
+      
     } catch (err) {
       console.error('Swipe error:', err);
     }
@@ -115,6 +132,6 @@ const styles = StyleSheet.create({
   backButtonContainer: {
     padding: 20,
     alignItems: 'center',
-    marginBottom: 30, // ✅ extra space at bottom
+    marginBottom: 30,
   },
 });

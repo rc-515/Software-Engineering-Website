@@ -1,64 +1,35 @@
 <?php
 header('Content-Type: application/json');
-include 'db_implement.php';
-session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-if (!isset($_SESSION['username'])) {
-    echo json_encode(["error" => "Unauthorized"]);
+include __DIR__ . '/../db_implement.php';
+
+// Get POST body
+$input = json_decode(file_get_contents('php://input'), true);
+$challenger = $input['email'] ?? null;
+$opponent = $input['opponent_username'] ?? null;
+$swipe_result = $input['swipe_result'] ?? null;
+
+if (!$challenger || !$opponent || $swipe_result !== 'accepted') {
+    echo json_encode(["error" => "Unauthorized or irrelevant swipe"]);
     exit;
 }
 
-$currentUser = $_SESSION['username'];
+// Generate a random fight date 30–90 days from now
+$daysAhead = rand(30, 90);
+$fight_date = date('Y-m-d', strtotime("+$daysAhead days"));
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    echo json_encode(["error" => "Invalid request method"]);
-    exit;
-}
-
-$data = json_decode(file_get_contents("php://input"), true);
-
-if (!isset($data['opponent_username']) || !isset($data['swipe_result'])) {
-    echo json_encode(["error" => "Missing fields"]);
-    exit;
-}
-
-$opponentUsername = $data['opponent_username'];
-$swipeResult = $data['swipe_result'];
-
-if (!in_array($swipeResult, ['accepted', 'rejected'])) {
-    echo json_encode(["error" => "Invalid swipe result"]);
-    exit;
-}
-
-$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
-$stmt->bind_param("s", $currentUser);
-$stmt->execute();
-$userRow = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
-$stmt->bind_param("s", $opponentUsername);
-$stmt->execute();
-$opponentRow = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-if (!$userRow || !$opponentRow) {
-    echo json_encode(["error" => "User not found"]);
-    exit;
-}
-
-$userId = $userRow['id'];
-$opponentId = $opponentRow['id'];
-
-$stmt = $conn->prepare("INSERT INTO swipes (user_id, opponent_id, swipe_result) VALUES (?, ?, ?)");
-$stmt->bind_param("iis", $userId, $opponentId, $swipeResult);
+// Insert into matches table
+$stmt = $conn->prepare("INSERT INTO matches (challenger_name, opponent_name, fight_date) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $challenger, $opponent, $fight_date);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => "Swipe recorded"]);
+    echo json_encode(["result" => "match", "fight_date" => $fight_date]);
 } else {
-    echo json_encode(["error" => "Failed to record swipe"]);
+    echo json_encode(["error" => "Failed to create match", "details" => $stmt->error]);
 }
 
 $stmt->close();
 $conn->close();
-?>
