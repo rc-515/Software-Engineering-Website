@@ -1,17 +1,30 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header('Content-Type: application/json');
-include 'db_implement.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+include __DIR__ . '/../db_implement.php';
+
+$username = null;
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $username = $input['email'] ?? null;
+}
+
+if (!$username) {
     echo json_encode(["error" => "Unauthorized"]);
     exit;
 }
 
-$currentUser = $_SESSION['username'];
-
+// Get requesting user's stats
 $stmt = $conn->prepare("SELECT weight, height, bench_press, experience FROM users WHERE username = ?");
-$stmt->bind_param("s", $currentUser);
+$stmt->bind_param("s", $username);
 $stmt->execute();
 $userResult = $stmt->get_result();
 $userData = $userResult->fetch_assoc();
@@ -22,8 +35,9 @@ if (!$userData) {
     exit;
 }
 
+// Get all other users (potential opponents)
 $stmt = $conn->prepare("SELECT username, full_name, weight, height, bench_press, experience FROM users WHERE username != ?");
-$stmt->bind_param("s", $currentUser);
+$stmt->bind_param("s", $username);
 $stmt->execute();
 $opponentResult = $stmt->get_result();
 
@@ -45,7 +59,9 @@ while ($row = $opponentResult->fetch_assoc()) {
 
 echo json_encode(["matches" => $potentialMatches]);
 $conn->close();
+exit;
 
+// --- Utility functions ---
 function calculateWinProbability($user, $opponent) {
     $scoreUser = ($user['weight'] * 0.2) + ($user['height'] * 0.1) + ($user['bench_press'] * 0.7) + experienceToScore($user['experience']);
     $scoreOpponent = ($opponent['weight'] * 0.2) + ($opponent['height'] * 0.1) + ($opponent['bench_press'] * 0.7) + experienceToScore($opponent['experience']);
@@ -62,4 +78,3 @@ function experienceToScore($exp) {
         default: return 15;
     }
 }
-?>

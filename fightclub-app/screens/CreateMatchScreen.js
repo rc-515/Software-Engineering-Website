@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Text, Alert } from 'react-native';
+import { View, TextInput, Button, Text, Alert, StyleSheet, ScrollView } from 'react-native';
 import { createMatch, getAllUsers } from '../services/api';
-import { ScrollView } from 'react-native';
-import axios from 'axios';
 
 export default function CreateMatchScreen({ route, navigation }) {
   const challenger = route.params?.user?.email;
@@ -10,19 +8,16 @@ export default function CreateMatchScreen({ route, navigation }) {
   const [date, setDate] = useState('');
   const [allUsers, setAllUsers] = useState([]);
 
-  // ✅ Load all users on mount
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await getAllUsers();
-        console.log("✅ Loaded users from API:", res.data);
-        setAllUsers(res.data.filter(user => !!user.email)); // keep this for now
+        setAllUsers(res.data.filter(user => !!user.email));
       } catch (err) {
         console.error("❌ Failed to fetch users:", err);
         Alert.alert("Error", "Could not load user list");
       }
     };
-  
     fetchUsers();
   }, []);
 
@@ -37,31 +32,11 @@ export default function CreateMatchScreen({ route, navigation }) {
     const trimmedOpponent = opponent.trim().toLowerCase();
     const trimmedChallenger = challenger?.trim().toLowerCase();
 
-    if (!trimmedOpponent) {
-      Alert.alert("Missing Field", "Please enter opponent email.");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedOpponent)) {
-      Alert.alert("Invalid Email", "Please enter a valid opponent email address.");
-      return;
-    }
-
-    if (trimmedOpponent === trimmedChallenger) {
-      Alert.alert("Invalid Match", "You can't fight yourself!");
-      return;
-    }
-
-    if (!allUsers.some(user => user.email.toLowerCase() === trimmedOpponent)) {
-      Alert.alert("Invalid Opponent", "No user with that email exists.");
-      return;
-    }
-
-    if (!isValidDate(date)) {
-      Alert.alert("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.");
-      return;
-    }
+    if (!trimmedOpponent) return Alert.alert("Missing Field", "Please enter opponent email.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedOpponent)) return Alert.alert("Invalid Email", "Please enter a valid opponent email.");
+    if (trimmedOpponent === trimmedChallenger) return Alert.alert("Invalid Match", "You can't fight yourself!");
+    if (!allUsers.some(user => user.email.toLowerCase() === trimmedOpponent)) return Alert.alert("Invalid Opponent", "No user with that email exists.");
+    if (!isValidDate(date)) return Alert.alert("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.");
 
     try {
       await createMatch({
@@ -73,53 +48,99 @@ export default function CreateMatchScreen({ route, navigation }) {
       Alert.alert("Success", "Match created");
       navigation.navigate("Dashboard", { user: route.params?.user });
     } catch (err) {
-      console.log("Create match error:", JSON.stringify(err, null, 2));
       Alert.alert("Error", err.response?.data?.error || "Something went wrong");
     }
   };
 
   return (
-    <ScrollView style={{ padding: 20 }}>
-      <Text>Opponent Email:</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.label}>Opponent Email:</Text>
       <TextInput
         value={opponent}
         onChangeText={setOpponent}
         placeholder="Enter opponent's email"
-        style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
+        style={styles.input}
+        placeholderTextColor="#ccc"
         autoCapitalize="none"
       />
 
-      <Text>Date (YYYY-MM-DD):</Text>
+      <Text style={styles.label}>Date (YYYY-MM-DD):</Text>
       <TextInput
         value={date}
         onChangeText={setDate}
         placeholder="Enter date"
-        style={{ borderWidth: 1, marginBottom: 20, padding: 8 }}
+        style={styles.input}
+        placeholderTextColor="#ccc"
       />
 
-      <Button title="Schedule Match" onPress={create}/>
+      <View style={styles.buttonWrapper}>
+        <Button title="Schedule Match" onPress={create} color="#e53e3e" />
+      </View>
 
-      <Text style={{ marginTop: 20, fontWeight: 'bold', fontSize: 16 }}>
-        Registered Users:
-      </Text>
-
+      <Text style={styles.sectionHeader}>Registered Users:</Text>
       {allUsers.length === 0 ? (
-        <Text>Loading users...</Text>
-        ) : (
+        <Text style={styles.text}>Loading users...</Text>
+      ) : (
         allUsers
-        .filter(user => user.email && user.email.toLowerCase() !== challenger?.toLowerCase())
+          .filter(user => user.email.toLowerCase() !== challenger?.toLowerCase())
           .map((user, index) => (
-            <View key={index} style={{ marginVertical: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
-              <Text style={{ fontWeight: 'bold' }}>{user.full_name}</Text>
-              <Text>Email: {user.email}</Text>
-              <Text>Weight: {user.weight} lbs</Text>
-              <Text>Height: {user.height} in</Text>
-              <Text>Bench Press: {user.bench_press} lbs</Text>
-              <Text>Experience: {user.experience}</Text>
+            <View key={index} style={styles.userCard}>
+              <Text style={styles.userName}>{user.full_name}</Text>
+              <Text style={styles.text}>Email: {user.email}</Text>
+              <Text style={styles.text}>Weight: {user.weight} lbs</Text>
+              <Text style={styles.text}>Height: {user.height} in</Text>
+              <Text style={styles.text}>Bench Press: {user.bench_press} lbs</Text>
+              <Text style={styles.text}>Experience: {user.experience}</Text>
             </View>
           ))
       )}
-
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#1e293b',
+    padding: 20,
+    flex: 1,
+  },
+  label: {
+    color: '#ffcc00',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#334155',
+    padding: 10,
+    color: '#ffffff',
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  buttonWrapper: {
+    marginBottom: 25,
+  },
+  sectionHeader: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  text: {
+    color: '#ffffff',
+  },
+  userCard: {
+    marginBottom: 15,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: '#475569',
+  },
+  userName: {
+    color: '#ffcc00',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
+  },
+});
